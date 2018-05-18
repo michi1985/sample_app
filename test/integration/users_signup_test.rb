@@ -11,6 +11,9 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_template "users/new"
     assert_select "div.alert", "The form contains 4 errors."
     # assert_select 'form[action="/signup"]'
+    # 上記の action="/signup" がパーシャルでまとめることで
+    # 下記のように"users"になった。
+    assert_select 'form[action="/users"]'
     assert_template 'users/new'
     assert_select 'div#error_explanation'
     assert_select 'div.field_with_errors'
