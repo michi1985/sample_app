@@ -13,4 +13,25 @@ class SiteLayoutTest < ActionDispatch::IntegrationTest
     get signup_path
     assert_select "title", full_title("Sign up")
   end
+
+  test "logged in user's layout links" do
+    user = users(:michael)
+    log_in_as(user)
+    get users_path
+    assert_select "title", full_title("All users")
+    assert_select "a[href=?]", users_path
+    assert_select "a[href=?]", user_path(user)
+    assert_select "a[href=?]", logout_path
+    assert_select "a[href=?]", edit_user_path(user)
+  end
+
+  test "not logged in user's layout links" do
+    get users_path
+    follow_redirect!
+    assert_template 'sessions/new'
+    assert_select "title", full_title("Log in")
+    assert_select "a[href=?]", users_path, count: 0
+    assert_select "a[href=?]", login_path
+  end
+
 end
